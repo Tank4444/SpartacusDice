@@ -1,8 +1,13 @@
 package ru.chuikov.spartacusdice
 
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
+import android.animation.ObjectAnimator
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
+import android.view.animation.AccelerateInterpolator
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -10,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setMargins
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.transition.Scene
+import androidx.transition.TransitionManager
 import ru.chuikov.spartacusdice.databinding.ActivityMainBinding
 import kotlin.random.Random
 
@@ -22,14 +29,19 @@ class MainActivity : AppCompatActivity() {
     private var blueCubesLinear = mutableListOf<Int>()
     private var redCubesLinear = mutableListOf<Int>()
 
+    private val durationOfAnimation:Long = 2000
+    private val diceParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        val diceParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.MATCH_PARENT,)
-        diceParams.setMargins(10)
+
+        //diceParams.setMargins(10)
+
+
 
         //Black cubes
         binding.blackCubesInc.setImageDrawable(Drawable.createFromStream(assets.open("blackArrowUp.png"),"blackArrowUp.png"))
@@ -37,9 +49,9 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.blackCubes.observe(this){
             binding.blackCount.text = "$it"
             binding.blackCubes.removeAllViews()
-
             val value = mainViewModel.blackCubes.value?:3
             for (i in 1..value) binding.blackCubes.addView(ImageButton(this).apply {
+                diceParams.width = (binding.blackCubes.measuredWidth / 5)
                 layoutParams = diceParams
                 adjustViewBounds = true
                 scaleType = ImageView.ScaleType.CENTER_CROP
@@ -59,8 +71,25 @@ class MainActivity : AppCompatActivity() {
             for (i in 0..value -1) blackCubesLinear.add((1..6).random())
             blackCubesLinear.sort()
             blackCubesLinear.reverse()
+            ObjectAnimator.ofFloat(binding.blackCubes,View.ALPHA,0f,1f).apply {
+                interpolator = AccelerateInterpolator()
+                duration = durationOfAnimation
+                addListener(object :AnimatorListener{
+                    override fun onAnimationStart(p0: Animator) {
+                    }
 
+                    override fun onAnimationEnd(p0: Animator) {
+                    }
 
+                    override fun onAnimationCancel(p0: Animator) {
+                    }
+
+                    override fun onAnimationRepeat(p0: Animator) {
+                    }
+
+                })
+                start()
+            }
             binding.blackCubes.removeAllViews()
             for (i in blackCubesLinear){
                 binding.blackCubes.addView(ImageButton(this).apply {
@@ -97,6 +126,7 @@ class MainActivity : AppCompatActivity() {
 
             val value = mainViewModel.blueCubes.value?:3
             for (i in 1..value) binding.blueCubes.addView(ImageButton(this).apply {
+                diceParams.width = (binding.blueCubes.measuredWidth / 5)
                 layoutParams = diceParams
                 adjustViewBounds = true
                 scaleType = ImageView.ScaleType.CENTER_CROP
@@ -117,6 +147,11 @@ class MainActivity : AppCompatActivity() {
             blueCubesLinear.sort()
             blueCubesLinear.reverse()
 
+            ObjectAnimator.ofFloat(binding.blueCubes,View.ALPHA,0f,1f).also {
+                it.interpolator = AccelerateInterpolator()
+                it.duration = durationOfAnimation
+                it.start()
+            }
 
             binding.blueCubes.removeAllViews()
             for (i in blueCubesLinear){
@@ -154,6 +189,7 @@ class MainActivity : AppCompatActivity() {
 
             val value = mainViewModel.redCubes.value?:3
             for (i in 1..value) binding.redCubes.addView(ImageButton(this).apply {
+                diceParams.width = (binding.redCubes.measuredWidth / 5)
                 layoutParams = diceParams
                 adjustViewBounds = true
                 scaleType = ImageView.ScaleType.CENTER_CROP
@@ -174,7 +210,11 @@ class MainActivity : AppCompatActivity() {
             redCubesLinear.sort()
             redCubesLinear.reverse()
 
-
+            ObjectAnimator.ofFloat(binding.redCubes,View.ALPHA,0f,1f).also {
+                it.interpolator = AccelerateInterpolator()
+                it.duration = durationOfAnimation
+                it.start()
+            }
             binding.redCubes.removeAllViews()
             for (i in redCubesLinear){
                 binding.redCubes.addView(ImageButton(this).apply {
@@ -204,5 +244,32 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+    fun printCube(cubeColor: CubeColor){
+        val viewGroup = when(cubeColor){
+            CubeColor.Black-> binding.blackCubes
+            CubeColor.Blue-> binding.blueCubes
+            CubeColor.RED-> binding.redCubes
+        }
+        ObjectAnimator.ofFloat(viewGroup,View.ALPHA,0f,1f).also {
+            it.interpolator = AccelerateInterpolator()
+            it.duration = durationOfAnimation
+            it.start()
+        }
+        viewGroup.removeAllViews()
+        val count = when(cubeColor){
+            CubeColor.Black-> mainViewModel.blackCubes.value?:3
+            CubeColor.Blue-> mainViewModel.blackCubes.value?:3
+            CubeColor.RED-> mainViewModel.redCubes.value?:3
+        }
+        for (i in 1..count){
 
+        }
+    }
 }
+
+enum class CubeColor{
+    RED,
+    Black,
+    Blue
+}
+
