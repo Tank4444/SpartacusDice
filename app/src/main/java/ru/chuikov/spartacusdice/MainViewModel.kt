@@ -22,6 +22,14 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
         (1..6).random(),
     ))
 
+    private var listOfDiceThrows:MutableList<DiceThrow> = mutableListOf()
+
+    fun getListOfThrows() = listOfDiceThrows
+
+    fun addToListThrows(dThrow:DiceThrow){
+        listOfDiceThrows.add(dThrow)
+    }
+
     fun addCube(color: CubeColor){
         when(color){
             CubeColor.Blue -> if(blueCubes.value!!.size<5) blueCubes.value = blueCubes.value?.toMutableList()?.apply { add(getRandomDice()) }
@@ -46,6 +54,7 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
                 }
                 sort()
                 reverse()
+                addToListThrows(DiceThrow(color,this))
             }
             CubeColor.Red -> redCubes.value = redCubes.value?.toMutableList()?.apply {
                 forEachIndexed { index, i ->
@@ -53,6 +62,7 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
                 }
                 sort()
                 reverse()
+                addToListThrows(DiceThrow(color,this))
             }
             CubeColor.Black -> blackCubes.value = blackCubes.value?.toMutableList()?.apply {
                 forEachIndexed { index, i ->
@@ -60,6 +70,7 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
                 }
                 sort()
                 reverse()
+                addToListThrows(DiceThrow(color,this))
             }
         }
     }
@@ -68,12 +79,15 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
         when(color){
             CubeColor.Blue -> blueCubes.value = blueCubes.value?.toMutableList()?.apply {
                 set(index,getRandomDice())
+                addToListThrows(DiceThrow(color,this))
             }
             CubeColor.Black -> blackCubes.value = blackCubes.value?.toMutableList()?.apply {
                 set(index,getRandomDice())
+                addToListThrows(DiceThrow(color,this))
             }
             CubeColor.Red -> redCubes.value = redCubes.value?.toMutableList()?.apply {
                 set(index,getRandomDice())
+                addToListThrows(DiceThrow(color,this))
             }
 
         }
