@@ -9,27 +9,23 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
 
     var blueCubes:MutableLiveData<List<Int>> = MutableLiveData(listOf(
         (1..6).random(),
-        (1..6).random(),
-        (1..6).random(),
     ))
     var blackCubes:MutableLiveData<List<Int>> = MutableLiveData(listOf(
-        (1..6).random(),
-        (1..6).random(),
         (1..6).random(),
     ))
     var redCubes:MutableLiveData<List<Int>> = MutableLiveData(listOf(
         (1..6).random(),
-        (1..6).random(),
-        (1..6).random(),
     ))
 
 
-    private var listOfDiceThrows:MutableList<DiceThrow> = mutableListOf()
-
-    fun getListOfThrows() = listOfDiceThrows
+    var listOfDiceThrows:MutableLiveData<MutableList<DiceThrow>> = MutableLiveData(mutableListOf())
 
     fun addToListThrows(dThrow:DiceThrow){
-        listOfDiceThrows.add(dThrow)
+        listOfDiceThrows.value?.add(dThrow)
+    }
+
+    fun clearListThrows(){
+        listOfDiceThrows.value?.clear()
     }
 
     fun addCube(color: CubeColor){

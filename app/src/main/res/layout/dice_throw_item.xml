@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/dice_throw_list"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:weightSum="5"
+    >
 
 </LinearLayout>

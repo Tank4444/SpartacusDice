@@ -25,10 +25,14 @@ class HistoryFragment : Fragment() {
     ): View? {
         binding = FragmentHistoryBinding.inflate(inflater,container,false)
         mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-        val list = mainViewModel.getListOfThrows()
-        list.reverse()
-        val adapter = DiceThrowAdapter(list,requireContext())
-        binding.throwsList.adapter = adapter
+        mainViewModel.listOfDiceThrows.observe(viewLifecycleOwner){
+            binding.throwsList.adapter = null
+            val l = it
+            l.reverse()
+            val adapter = DiceThrowAdapter(l,requireContext())
+            binding.throwsList.adapter = adapter
+        }
+
 
 
         return binding.root
@@ -51,7 +55,7 @@ class HistoryFragment : Fragment() {
         override fun getItemCount(): Int = list.size
 
         override fun onBindViewHolder(holder: DiceThrowViewHolder, position: Int) {
-            holder.list.setBackgroundColor(Color.rgb((0..255).random(),(0..255).random(),(0..255).random(),))
+            //holder.list.setBackgroundColor(Color.rgb((0..255).random(),(0..255).random(),(0..255).random(),))
             list[position].list.forEachIndexed { index, i ->
                 val button = generateCube(
                         context,
@@ -62,7 +66,8 @@ class HistoryFragment : Fragment() {
                     }
                 button.layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    1f
                 )
                 holder.list.addView(button)
             }

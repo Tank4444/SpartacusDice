@@ -12,12 +12,13 @@ enum class CubeColor {
     Blue
 }
 
-public fun generateCube(context: Context, color: CubeColor, i: Int, measuredWidth:Int, onClick:(View)->Unit): ImageButton = ImageButton(context).apply{
+fun generateCube(context: Context, color: CubeColor, i: Int, measuredWidth:Int, onClick:(View)->Unit): ImageButton = ImageButton(context).apply{
     val param = LinearLayout.LayoutParams(
         LinearLayout.LayoutParams.WRAP_CONTENT,
         LinearLayout.LayoutParams.WRAP_CONTENT,
+        1f
     )
-    param.width = measuredWidth / 5
+    //param.width = measuredWidth / 5
     layoutParams = param
     adjustViewBounds = true
     scaleType = ImageView.ScaleType.CENTER_CROP
