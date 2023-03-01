@@ -1,6 +1,7 @@
 package ru.chuikov.spartacusdice
 
 import android.app.Application
+import android.os.Bundle
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 
@@ -21,6 +22,7 @@ class MainViewModel(app:Application): AndroidViewModel(app) {
         (1..6).random(),
         (1..6).random(),
     ))
+
 
     private var listOfDiceThrows:MutableList<DiceThrow> = mutableListOf()
 

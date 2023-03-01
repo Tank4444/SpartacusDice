@@ -21,10 +21,11 @@ class DiceFragment : Fragment() {
     private lateinit var binding:FragmentDiceBinding
     private lateinit var mainViewModel:MainViewModel
 
-    private val durationOfAnimation: Long = 2000
+    private val durationOfAnimation: Long = 1000
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -34,12 +35,10 @@ class DiceFragment : Fragment() {
         binding = FragmentDiceBinding.inflate(inflater,container,false)
         mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
 
-        Toast.makeText(requireContext(),"${mainViewModel.redCubes.value?:"Empty"}",Toast.LENGTH_LONG).show()
-        printCubes(CubeColor.Red,binding.redCubes,binding.redCount, mainViewModel.redCubes.value?: listOf())
-        printCubes(CubeColor.Black,binding.blackCubes,binding.blackCount, mainViewModel.blackCubes.value?: listOf())
-        printCubes(CubeColor.Blue,binding.blueCubes,binding.blueCount, mainViewModel.blueCubes.value?: listOf())
-
-
+//        Toast.makeText(requireContext(),"${mainViewModel.redCubes.value?:"Empty"}",Toast.LENGTH_LONG).show()
+//        printCubes(CubeColor.Red,binding.redCubes,binding.redCount, mainViewModel.redCubes.value?: listOf())
+//        printCubes(CubeColor.Black,binding.blackCubes,binding.blackCount, mainViewModel.blackCubes.value?: listOf())
+//        printCubes(CubeColor.Blue,binding.blueCubes,binding.blueCount, mainViewModel.blueCubes.value?: listOf())
 
         //Black cubes
         binding.blackCubesInc.setImageDrawable(
@@ -136,10 +135,15 @@ class DiceFragment : Fragment() {
         text.text = "${list.size}"
         parent.removeAllViews()
         list.forEachIndexed { index, i ->
-            parent.addView(generateCube(requireContext(),cubeColor,i, parent.measuredWidth
+            val view = generateCube(requireContext(),cubeColor,i, parent.measuredWidth
             ){
                 mainViewModel.rollTheDiceByIndex(cubeColor,index)
-            })
+            }
+            parent.addView(view)
+            view.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
         }
     }
 
