@@ -32,7 +32,9 @@ class HistoryFragment : Fragment() {
             val adapter = DiceThrowAdapter(l,requireContext())
             binding.throwsList.adapter = adapter
         }
-
+        binding.clearButton.setOnClickListener {
+            mainViewModel.listOfDiceThrows.value = mutableListOf()
+        }
 
 
         return binding.root
@@ -64,11 +66,6 @@ class HistoryFragment : Fragment() {
                         holder.list.width,
                     ){
                     }
-                button.layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    1f
-                )
                 holder.list.addView(button)
             }
 

@@ -140,10 +140,6 @@ class DiceFragment : Fragment() {
                 mainViewModel.rollTheDiceByIndex(cubeColor,index)
             }
             parent.addView(view)
-            view.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
         }
     }
 

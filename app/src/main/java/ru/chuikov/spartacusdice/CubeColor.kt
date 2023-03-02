@@ -14,7 +14,7 @@ enum class CubeColor {
 
 fun generateCube(context: Context, color: CubeColor, i: Int, measuredWidth:Int, onClick:(View)->Unit): ImageButton = ImageButton(context).apply{
     val param = LinearLayout.LayoutParams(
-        LinearLayout.LayoutParams.WRAP_CONTENT,
+        0,
         LinearLayout.LayoutParams.WRAP_CONTENT,
         1f
     )
